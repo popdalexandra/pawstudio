@@ -19,3 +19,10 @@ export const insertProductsSchema = z.object({
     price: currency,
 
 });
+
+//Schema pentru sign in
+export const signInFormSchema = z.object({
+    email: z.string().email('Email-ul este invalid.'),
+    password: z.string().min(6, 'Parrola trebuie sa contina cel putin 6 caractere'),
+
+})
