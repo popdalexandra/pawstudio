@@ -20,9 +20,21 @@ export const insertProductsSchema = z.object({
 
 });
 
-//Schema pentru sign in
+//Schema pentru autentificare
 export const signInFormSchema = z.object({
     email: z.string().email('Email-ul este invalid.'),
     password: z.string().min(6, 'Parrola trebuie sa contina cel putin 6 caractere'),
 
 })
+
+//Schema pentru inregistrare
+export const signUpFormSchema = z.object({
+    name:z.string().min(3, 'Numele trebuie sa fie de cel putin 3 caractere.'),
+    email: z.string().email('Email-ul este invalid.'),
+    password: z.string().min(6, 'Parola trebuie sa contina cel putin 6 caractere'),
+    confirmPassword: z.string().min(6, 'Confirmarea parolei trebuie sa contina cel putin 6 caractere'),
+
+}).refine((data)=> data.password === data.confirmPassword, {
+    message: "Parolele nu se potrivesc.",
+    path: ['confirmPassword'],
+});
