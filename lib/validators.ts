@@ -38,3 +38,24 @@ export const signUpFormSchema = z.object({
     message: "Parolele nu se potrivesc.",
     path: ['confirmPassword'],
 });
+
+//Schema cos de cumparaturi
+export const cartItemSchema = z.object({
+    productId: z.string().min(1, 'Produsul este necesar.'),
+    name: z.string().min(1, 'Numele este necesar.'),
+    slug: z.string().min(1, 'Slug-ul este necesar.'),
+    qty: z.number().int().nonnegative('Cantitatea nu poate fi negativa.'),
+    image: z.string().min(1, 'Imaginea este necesara.'),
+    price: currency,
+
+});
+
+export const insertCartSchema = z.object({
+    items:z.array(cartItemSchema),
+    itemsPrice: currency,
+    totalPrice: currency,
+    shippingPrice: currency,
+    taxPrice:currency,
+    sessionCartId: z.string().min(1, ' Session cart id este necesar.'),
+    userId: z.string().optional().nullable(),
+});

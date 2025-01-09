@@ -23,7 +23,7 @@ const SignUpForm = () => {
     const SignUpButton = () => {
         const {pending} = useFormStatus();
         return (
-            <Button disabled={pending} className="w-full" variant='default'>
+            <Button disabled={pending} className="w-full hover:bg-pink-700" variant='default'>
                 {pending ? '...' : 'Sa incepem'}
             </Button>
         )

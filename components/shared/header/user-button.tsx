@@ -17,7 +17,7 @@ const UserButton = async () => {
 
     if(!session) // daca nu suntem autentificati
     {
-        return <Button asChild>
+        return <Button asChild className="hover:bg-pink-700">
             <Link href='/sign-in'>
                 <UserIcon/> Autentificare
             </Link>
