@@ -17,6 +17,7 @@ export const signUpDefaultValues = {
 
 export const shippingAddressDefaultValues = {
     fullName: '',
+    phoneNumber: '',
     streetAddress:'',
     city: '',
     postalCode: '',
@@ -24,3 +25,8 @@ export const shippingAddressDefaultValues = {
 
 }
 
+export const PAYMENT_METHODS = process.env.PAYMENT_METHODS
+  ? process.env.PAYMENT_METHODS.split(', ')
+  : ['PayPal', 'Card de credit', 'Numerar'];
+export const DEFAULT_PAYMENT_METHOD =
+  process.env.DEFAULT_PAYMENT_METHOD || 'PayPal';

@@ -70,6 +70,21 @@ const ShippingAddressForm = ({address}: {address: ShippingAddress}) => {
                 <div className="flex flex-col md:flex-row gap-5">
                 <FormField
                     control={form.control}
+                    name='phoneNumber'
+                    render={({ field, } : {field: ControllerRenderProps <z.infer<typeof shippingAddressSchema>, 'phoneNumber'>;}) => 
+                    ( <FormItem className='w-full'>
+                        <FormLabel>Număr de telefon</FormLabel>
+                        <FormControl>
+                            <Input placeholder="Introduceți numărul de telefon." {...field} />
+                        </FormControl>
+                        <FormMessage/>
+                    </FormItem>
+                    )} />
+                </div>
+
+                <div className="flex flex-col md:flex-row gap-5">
+                <FormField
+                    control={form.control}
                     name='streetAddress'
                     render={({ field, } : {field: ControllerRenderProps <z.infer<typeof shippingAddressSchema>, 'streetAddress'>;}) => 
                     ( <FormItem className='w-full'>

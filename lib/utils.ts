@@ -89,3 +89,56 @@ export function formatCurrency(
 
   return CURRENCY_FORMATTER.format(convertedAmount); // Implicit RON
 }
+
+// Shorten UUID
+export function formatId(id: string) {
+  return `..${id.substring(id.length - 6)}`; //ultimele 6 caractere
+}
+
+// Format date and times
+export const formatDateTime = (dateString: Date) => {
+  const dateTimeOptions: Intl.DateTimeFormatOptions = {
+    month: 'short', // numele lunii abreviat (e.g., 'ian.')
+    year: 'numeric', // an numeric complet (e.g., '2025')
+    day: 'numeric', // zi numerică (e.g., '10')
+    hour: 'numeric', // oră numerică (e.g., '15')
+    minute: 'numeric', // minut numeric (e.g., '30')
+    hour12: false, // folosește formatul de 24 de ore
+  };
+  const dateOptions: Intl.DateTimeFormatOptions = {
+    weekday: 'short', // ziua săptămânii abreviată (e.g., 'lun.')
+    month: 'short', // numele lunii abreviat (e.g., 'ian.')
+    year: 'numeric', // an numeric complet (e.g., '2025')
+    day: 'numeric', // zi numerică (e.g., '10')
+  };
+  const timeOptions: Intl.DateTimeFormatOptions = {
+    hour: 'numeric', // oră numerică (e.g., '15')
+    minute: 'numeric', // minut numeric (e.g., '30')
+    hour12: false, // folosește formatul de 24 de ore
+  };
+  const formattedDateTime: string = new Date(dateString).toLocaleString(
+    'ro-RO',
+    dateTimeOptions
+  );
+  const formattedDate: string = new Date(dateString).toLocaleString(
+    'ro-RO',
+    dateOptions
+  );
+  const formattedTime: string = new Date(dateString).toLocaleString(
+    'ro-RO',
+    timeOptions
+  );
+  return {
+    dateTime: formattedDateTime,
+    dateOnly: formattedDate,
+    timeOnly: formattedTime,
+  };
+};
+
+
+// const test = new Date('2023-10-25T08:30:00Z');
+// const format = formatDateTime(test);
+
+// console.log(format.dateTime);
+// console.log(format.dateOnly);
+// console.log(format.timeOnly);

@@ -1,5 +1,6 @@
 import {z} from 'zod';
 import { formatNumberWithDecimal } from './utils';
+import { PAYMENT_METHODS } from './constants';
 
 const currency = z
         .string()
@@ -62,14 +63,44 @@ export const insertCartSchema = z.object({
 
 //Schema pentru shipping address
 export const shippingAddressSchema = z.object({
-    fullName: z.string().min(3, 'Vă rugăm să completați câmpul cu numele dumneavoastră. Acest câmp nu poate fi lăsat gol.'), 
+    fullName: z.string().min(3, 'Vă rugăm să completați câmpul cu numele dumneavoastră. Acest câmp nu poate fi lăsat gol.'),
+    phoneNumber:  z.string().min(10, 'Vă rugăm să completați câmpul cu numărul de telefon. Acest câmp nu poate fi lăsat gol.'),
     streetAddress: z.string().min(3, 'Vă rugăm să completați câmpul cu adresa dumneavoastră. Acest câmp nu poate fi lăsat gol.'),
     city: z.string().min(3, 'Vă rugăm să completați câmpul cu orașul și județul dumneavoastră. Acest câmp nu poate fi lăsat gol.'), 
     postalCode: z.string().min(3, 'Vă rugăm să completați câmpul cu codul poștal. Acest câmp nu poate fi lăsat gol.'),
     country: z.string().min(3, 'Vă rugăm să completați câmpul cu țara dumneavoastră. Acest câmp nu poate fi lăsat gol.'), 
     lat: z.number().optional(),
     lng: z.number().optional(),
+});
 
+export const paymentMethodSchema = z
+  .object({
+    type: z.string().min(1, 'Vă rugăm să selectați o metodă de plată. Acest pas este obligatoriu.'),
+  })
+  .refine((data) => PAYMENT_METHODS.includes(data.type), {
+    path: ['type'],
+    message: 'Metodă de plată invalidă.',
+  });
 
-})
-
+// Schema for inserting order
+export const insertOrderSchema = z.object({
+    userId: z.string().min(1, 'Utilizatorul este obligatoriu.'),
+    itemsPrice: currency,
+    shippingPrice: currency,
+    taxPrice: currency,
+    totalPrice: currency,
+    paymentMethod: z.string().refine((data) => PAYMENT_METHODS.includes(data), {
+      message: 'Metoda de plată este invalidă.',
+    }),
+    shippingAddress: shippingAddressSchema,
+  });
+  
+  // Schema for inserting an order item
+  export const insertOrderItemSchema = z.object({
+    productId: z.string(),
+    slug: z.string(),
+    image: z.string(),
+    name: z.string(),
+    price: currency,
+    qty: z.number(),
+  });
