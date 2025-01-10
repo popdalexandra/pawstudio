@@ -1,39 +1,76 @@
 'use client'
-import { CartItem } from "@/types";
+import { Cart, CartItem } from "@/types";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { Plus } from "lucide-react";
+import { Plus, Minus, Loader } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
-import { addItemToCart } from "@/lib/actions/cart.actions";
+import { addItemToCart, removeItemFromCart } from "@/lib/actions/cart.actions";
+import { useTransition } from "react";
 
 
-const AddToCarrt = ({item}: {item: CartItem}) => {
+
+const AddToCarrt = ({cart, item}: {cart?: Cart,item: CartItem}) => {
     const router = useRouter();
     const {toast} = useToast();
+    const[isPending, startTransition] = useTransition();
 
     const handleAddToCart = async () => {
-        const res = await addItemToCart(item);
+        startTransition(async () => {
+            const res = await addItemToCart(item);
 
-        if(!res.success){
+            if(!res.success){
+                toast({
+                    variant: 'destructive',
+                    description:res.message
+                });
+                return;
+            }
+            //Handle success add to cart
             toast({
-                variant: 'destructive',
-                description:res.message
+                description:res.message,
+                action: (
+                    <ToastAction className="bg-primary text-white hover:bg-pink-800" altText='Cos de cumparaturi' onClick={() => router.push('/cart') }>
+                        Finalizeaza comanda
+                    </ToastAction>
+                )
             });
-            return;
-        }
-        //Handle success add to cart
-        toast({
-            description:res.message,
-            action: (
-                <ToastAction className="bg-primary text-white hover:bg-pink-800" altText='Cos de cumparaturi' onClick={() => router.push('/cart') }>
-                    Finalizeaza comanda
-                </ToastAction>
-            )
-        })
-    } 
+        });
+       
+    };
+    //Verificam daca produsul este in cos
+    
+    const handleRemoveFromCart = async () => {
+        startTransition(async () => {
+            const res = await removeItemFromCart(item.productId);
 
-    return <Button className="w-full hover:bg-pink-700" type='button' onClick= {handleAddToCart}><Plus/>Adauga in cos</Button> 
+        toast({
+            variant: res.success ? 'default' : 'destructive',
+            description: res.message,
+        });
+        return;
+        });
+        
+    };
+
+    const existItem = cart && cart.items.find((x) => x.productId === item.productId);
+    return existItem ? (
+        <div>
+            <Button type='button' variant='outline' onClick={handleRemoveFromCart}>
+                {isPending ? (<Loader className="w-4 h-4 animate-spin"/>) : (<Minus className="h-4 w-4"/>) }
+            </Button>
+
+            <span className="px-2">{existItem.qty}</span>
+
+            <Button type='button' variant='outline' onClick={handleAddToCart}>
+                {isPending ? (<Loader className="w-4 h-4 animate-spin"/>) : (<Plus className="h-4 w-4"/>) }
+            </Button>
+        </div>
+    ) : (
+        <Button className="w-full hover:bg-pink-700" type='button' onClick= {handleAddToCart}>
+            {isPending ? (<Loader className="w-4 h-4 animate-spin"/>) : (<Plus className="h-4 w-4"/>) } Adauga in cos
+        </Button> 
+    )
 };
  
 export default AddToCarrt;

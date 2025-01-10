@@ -138,6 +138,54 @@ export async function getMyCart() {
       totalPrice: cart.totalPrice.toString(),
       shippingPrice: cart.shippingPrice.toString(),
       taxPrice: cart.taxPrice.toString(),
-    })
+    });
 
+}
+
+export async function removeItemFromCart(productId: string){
+   try{
+
+      //Verificam cookie-urile din cos
+      const sessionCartId = (await cookies()).get('sessionCartId')?.value;
+      if(!sessionCartId) throw new Error('Sesiunea pentru cosul de cumparaturi nu a fost gasita.');
+
+      const product = await prisma.product.findFirst({
+         where:{id:productId}
+      });
+      if(!product) throw new Error ('Produsul nu a fost gasit!');
+
+      const cart = await getMyCart();
+      if(!cart) throw new Error('Cosul de cumparaturi nu a fost gasit!');
+
+      const exist = (cart.items as CartItem[]).find((x)=> x.productId === productId);
+      if (!exist) throw new Error("Produsul nu a fost gasit.");
+
+      if(exist.qty === 1){
+         //Sterge din cos
+         cart.items = (cart.items as CartItem[]).filter((x) => x.productId !== exist.productId)
+      } else {
+         //Scadem cantitatea
+         (cart.items as CartItem[]).find((x) => x.productId === productId)!.qty = exist.qty - 1;
+      }
+
+      //Actualizam in database
+      await  prisma.cart.update({
+         where:{id: cart.id},
+         data: {
+            items: cart.items as Prisma.CartUpdateitemsInput[],
+            ...calcPrice(cart.items as CartItem[]),
+         }
+      });
+
+      revalidatePath(`/product/${product.slug}`);
+
+      return{
+         success: true,
+         message: `${product.name} a fost sters din cosul de cumparaturi.`,
+      };
+      
+   }catch (error){
+      return {success:false, message: formatError(error)}
+
+   }
 }

@@ -59,3 +59,17 @@ export const insertCartSchema = z.object({
     sessionCartId: z.string().min(1, ' Session cart id este necesar.'),
     userId: z.string().optional().nullable(),
 });
+
+//Schema pentru shipping address
+export const shippingAddressSchema = z.object({
+    fullName: z.string().min(3, 'Vă rugăm să completați câmpul cu numele dumneavoastră. Acest câmp nu poate fi lăsat gol.'), 
+    streetAddress: z.string().min(3, 'Vă rugăm să completați câmpul cu adresa dumneavoastră. Acest câmp nu poate fi lăsat gol.'),
+    city: z.string().min(3, 'Vă rugăm să completați câmpul cu orașul și județul dumneavoastră. Acest câmp nu poate fi lăsat gol.'), 
+    postalCode: z.string().min(3, 'Vă rugăm să completați câmpul cu codul poștal. Acest câmp nu poate fi lăsat gol.'),
+    country: z.string().min(3, 'Vă rugăm să completați câmpul cu țara dumneavoastră. Acest câmp nu poate fi lăsat gol.'), 
+    lat: z.number().optional(),
+    lng: z.number().optional(),
+
+
+})
+

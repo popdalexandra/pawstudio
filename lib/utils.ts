@@ -47,3 +47,45 @@ export function round2(value: number | string) {
   }
 
 }
+
+const EXCHANGE_RATE = 4.98; // Exemplu: 1 EUR = 4.98 RON
+
+const CURRENCY_FORMATTER = new Intl.NumberFormat('en-RO', {
+  currency:'RON',
+  style: 'currency',
+  minimumFractionDigits:2,
+});
+
+const EUR_FORMATTER = new Intl.NumberFormat('en-RO', {
+  currency: 'EUR',
+  style: 'currency',
+  minimumFractionDigits: 2,
+});
+
+// export function formatCurrency(amount: number | string | null) {
+//   if(typeof amount === 'number'){
+//     return CURRENCY_FORMATTER.format(amount);
+//   } else if(typeof amount === 'string' ){
+//     return CURRENCY_FORMATTER.format(Number(amount));
+//   } else {
+//     return 'Nan';
+//   }
+// }
+
+export function formatCurrency(
+  amount: number | string | null,
+  currency: 'RON' | 'EUR' = 'RON' // Moneda curentă, implicit RON
+) {
+  if (amount === null) return 'NaN';
+
+  const numericAmount = typeof amount === 'string' ? Number(amount) : amount;
+
+  // Conversie între monede
+  let convertedAmount = numericAmount;
+  if (currency === 'EUR') {
+    convertedAmount = numericAmount / EXCHANGE_RATE; // Din RON în EUR
+    return EUR_FORMATTER.format(convertedAmount);
+  }
+
+  return CURRENCY_FORMATTER.format(convertedAmount); // Implicit RON
+}
