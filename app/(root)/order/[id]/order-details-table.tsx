@@ -1,3 +1,4 @@
+'use client';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -13,11 +14,20 @@ import { formatCurrency, formatDateTime, formatId } from '@/lib/utils';
 import { Order } from '@/types';
 import Link from 'next/link';
 import Image from 'next/image';
-//import { useToast } from '@/hooks/use-toast';
+import { useToast } from '@/hooks/use-toast';
 //import { useTransition } from 'react';
+import {
+  PayPalButtons,
+  PayPalScriptProvider,
+  usePayPalScriptReducer,
+} from '@paypal/react-paypal-js';
+import {
+  createPayPalOrder,
+  approvePayPalOrder,
+} from '@/lib/actions/order.actions';
 
 
-const OrderDetailsTable = ({order}: {order: Order}) => {
+const OrderDetailsTable = ({order, paypalClientId}: {order: Order, paypalClientId: string}) => {
 
     const {
         id,
@@ -34,7 +44,41 @@ const OrderDetailsTable = ({order}: {order: Order}) => {
         deliveredAt,
       } = order;
     
-      //const { toast } = useToast();
+      const { toast } = useToast();
+
+      const PrintLoadingState = () => {
+        const [{ isPending, isRejected }] = usePayPalScriptReducer();
+        let status = '';
+    
+        if (isPending) {
+          status = 'Se încarcă PayPal...';
+        } else if (isRejected) {
+          status = 'A apărut o eroare la procesarea plății prin PayPal.';
+        }
+        return status;
+      };
+    
+      const handleCreatePayPalOrder = async () => {
+        const res = await createPayPalOrder(order.id);
+    
+        if (!res.success) {
+          toast({
+            variant: 'destructive',
+            description: res.message,
+          });
+        }
+    
+        return res.data;
+      };
+    
+      const handleApprovePayPalOrder = async (data: { orderID: string }) => {
+        const res = await approvePayPalOrder(order.id, data);
+    
+        toast({
+          variant: res.success ? 'default' : 'destructive',
+          description: res.message,
+        });
+      };
 
     return ( 
         <>
@@ -132,7 +176,23 @@ const OrderDetailsTable = ({order}: {order: Order}) => {
                   <div>Total</div>
                   <div>{formatCurrency(totalPrice)}</div>
                 </div>
-  
+
+                {/*Plata cu PayPal*/}
+
+                {!isPaid && paymentMethod === 'PayPal' && (
+                <div>
+                  <PayPalScriptProvider options={{ clientId: paypalClientId }}>
+                    <PrintLoadingState/>
+                    <PayPalButtons
+                      createOrder={handleCreatePayPalOrder}
+                      onApprove={handleApprovePayPalOrder}
+                    />
+                  </PayPalScriptProvider>
+                  <p className="text-xs text-gray-500"> Prețul afișat include taxe.<br/>Toate plățile efectuate prin PayPal vor fi procesate în EUR(€). <br/>Conversia din RON în EUR se realizează folosind un curs valutar fix de 1 RON = 0.207 USD.
+              <br/>Vă rugăm să verificați suma finală afișată în PayPal înainte de confirmarea plății.</p>
+                </div>
+              )}
+              
               </CardContent>
             </Card>
           </div>
