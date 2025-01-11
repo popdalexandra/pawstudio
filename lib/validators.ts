@@ -112,3 +112,9 @@ export const insertOrderSchema = z.object({
   email_address: z.string(),
   pricePaid: z.string(),
 });
+
+//Update user profile
+export const updateProfileSchema = z.object({
+  name: z.string().min(3, 'Numele trebuie sa fie de cel putin 3 caractere.'),
+  email: z.string().email('Email-ul este invalid.'),
+});
