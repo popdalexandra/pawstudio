@@ -19,7 +19,7 @@ export function formatNumberWithDecimal(num: number): string{
 
 // Format Errors
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function formatError(error:any){
+export function formatError(error:any){
     if(error.name ==='ZodError'){
       //Handle Zod error
       const fieldErrors = Object.keys(error.errors).map((field) => error.errors[field].message);
@@ -90,6 +90,15 @@ export function formatCurrency(
 
   return CURRENCY_FORMATTER.format(convertedAmount); // Implicit RON
 }
+
+
+// Format Number
+const NUMBER_FORMATTER = new Intl.NumberFormat('ro-RO'); //en-US
+
+export function formatNumber(number: number) {
+  return NUMBER_FORMATTER.format(number);
+}
+
 
 // Shorten UUID
 export function formatId(id: string) {

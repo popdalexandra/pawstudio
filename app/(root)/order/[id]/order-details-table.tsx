@@ -9,13 +9,13 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-//import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { formatCurrency, formatDateTime, formatId } from '@/lib/utils';
 import { Order } from '@/types';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
-//import { useTransition } from 'react';
+import { useTransition } from 'react';
 import {
   PayPalButtons,
   PayPalScriptProvider,
@@ -24,10 +24,12 @@ import {
 import {
   createPayPalOrder,
   approvePayPalOrder,
+  updateOrderToPaidCOD,
+  deliverOrder
 } from '@/lib/actions/order.actions';
 
 
-const OrderDetailsTable = ({order, paypalClientId}: {order: Order, paypalClientId: string}) => {
+const OrderDetailsTable = ({order, paypalClientId, isAdmin}: {order: Order, paypalClientId: string, isAdmin:boolean}) => {
 
     const {
         id,
@@ -79,6 +81,55 @@ const OrderDetailsTable = ({order, paypalClientId}: {order: Order, paypalClientI
           description: res.message,
         });
       };
+
+       // Button to mark order as paid
+       const MarkAsPaidButton = () => {
+        const [isPending, startTransition] = useTransition();
+        const { toast } = useToast();
+      
+        return (
+          <Button
+          className=" hover:bg-pink-700"
+            type="button"
+            disabled={isPending}
+            onClick={() =>
+              startTransition(async () => {
+                const res = await updateOrderToPaidCOD(order.id);
+                toast({
+                  variant: res.success ? 'default' : 'destructive',
+                  description: res.message,
+                });
+              })
+            }
+          >
+            {isPending ? '...' : 'Marchează ca plătit'}
+          </Button>
+        );
+      };
+
+  // Button to mark order as delivered
+  const MarkAsDeliveredButton = () => {
+    const [isPending, startTransition] = useTransition();
+    const { toast } = useToast();
+  
+    return (
+      <Button className=" hover:bg-pink-700"
+        type="button"
+        disabled={isPending}
+        onClick={() =>
+          startTransition(async () => {
+            const res = await deliverOrder(order.id);
+            toast({
+              variant: res.success ? 'default' : 'destructive',
+              description: res.message,
+            });
+          })
+        }
+      >
+        {isPending ? '...' : 'Marchează ca livrat'}
+      </Button>
+    );
+  };
 
     return ( 
         <>
@@ -192,6 +243,13 @@ const OrderDetailsTable = ({order, paypalClientId}: {order: Order, paypalClientI
               <br/>Vă rugăm să verificați suma finală afișată în PayPal înainte de confirmarea plății.</p>
                 </div>
               )}
+
+              {/*Cash On Delivery */}
+
+              {isAdmin && !isPaid && paymentMethod === 'Numerar' && (
+                <MarkAsPaidButton /> 
+              )}
+              {isAdmin && isPaid && !isDelivered && <MarkAsDeliveredButton />}
               
               </CardContent>
             </Card>

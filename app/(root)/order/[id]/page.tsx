@@ -6,6 +6,7 @@ import { ShippingAddress } from '@/types';
 //import Stripe from 'stripe';
 
 import { APP_NAME } from "@/lib/constants";
+import { auth } from '@/auth';
 
 export const metadata = {
     title: `Detalii comandă | ${APP_NAME}`
@@ -19,10 +20,13 @@ const OrderDetailsPage = async (props: {
     const { id } = await props.params;
     const order = await getOrderById(id);
     if (!order) notFound();
+
+    const session = await auth();
   
     return (<OrderDetailsTable order = {{  ...order,
         shippingAddress: order.shippingAddress as ShippingAddress,  }}
         paypalClientId={process.env.PAYPAL_CLIENT_ID || 'sb'}
+        isAdmin={session?.user?.role === 'admin' || false}
         />);
 }
  
