@@ -21,6 +21,11 @@ export const insertProductsSchema = z.object({
 
 });
 
+// Schema for updating products
+export const updateProductSchema = insertProductsSchema.extend({
+  id: z.string().min(1, 'Id este necesar'),
+});
+
 //Schema pentru autentificare
 export const signInFormSchema = z.object({
     email: z.string().email('Email-ul este invalid.'),

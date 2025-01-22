@@ -246,10 +246,16 @@ const OrderDetailsTable = ({order, paypalClientId, isAdmin}: {order: Order, payp
 
               {/*Cash On Delivery */}
 
-              {isAdmin && !isPaid && paymentMethod === 'Numerar' && (
-                <MarkAsPaidButton /> 
+              {isAdmin && !isDelivered && paymentMethod === 'Numerar' && (
+                <MarkAsDeliveredButton />
               )}
-              {isAdmin && isPaid && !isDelivered && <MarkAsDeliveredButton />}
+              {isAdmin && isDelivered && !isPaid && paymentMethod === 'Numerar' && (
+                <MarkAsPaidButton />
+              )}
+              {isAdmin && isPaid && !isDelivered && paymentMethod !== 'Numerar' && (
+                <MarkAsDeliveredButton />
+              )}
+
               
               </CardContent>
             </Card>

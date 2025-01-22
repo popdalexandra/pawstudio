@@ -44,9 +44,9 @@ const DeleteDialog = ({
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Ești sigur că vrei să ștergi această comandă ?</AlertDialogTitle>
+          <AlertDialogTitle>Ești sigur că vrei să ștergi această acțiune ?</AlertDialogTitle>
           <AlertDialogDescription>
-          Aceasta comandă nu poate fi recuperată.
+          Aceasta acțiune nu poate fi recuperată.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

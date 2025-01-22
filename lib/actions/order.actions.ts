@@ -14,6 +14,7 @@ import { PAGE_SIZE } from '../constants';
 import { Prisma } from '@prisma/client';
 
 
+
 // Create order and create the order items
 export async function createOrder() {
     try {
@@ -403,8 +404,17 @@ export async function deliverOrder(orderId: string) {
       },
     });
 
+    // if (!order) throw new Error('Comanda nu a fost găsită');
+    // if (!order.isPaid ) throw new Error('Comanda nu este plătită');
+
+
     if (!order) throw new Error('Comanda nu a fost găsită');
-    if (!order.isPaid) throw new Error('Comanda nu este plătită');
+    if (order.isDelivered) throw new Error('Comanda este deja livrată');
+
+    // Permitem livrarea pentru comenzile cu metoda de plată "Numerar" chiar dacă nu sunt plătite
+    if (!order.isPaid && order.paymentMethod !== 'Numerar') {
+      throw new Error('Comanda nu este plătită și nu poate fi livrată');
+    }
 
     await prisma.order.update({
       where: { id: orderId },

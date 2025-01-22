@@ -40,7 +40,7 @@ const AdminOrdersPage = async (props: {
     return (
       <div className='space-y-2'>
         <div className='flex items-center gap-3'>
-          <h1 className='h2-bold'>Orders</h1>
+          <h1 className='h2-bold'>Comenzi</h1>
           {searchText && (
             <div>
               Filtrat după <i>&quot;{searchText}&quot;</i>{' '}
