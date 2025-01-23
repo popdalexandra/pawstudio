@@ -371,7 +371,7 @@ const ProductForm = ({
             disabled={form.formState.isSubmitting}
             className='button col-span-2 w-full hover:bg-pink-700'
           >
-            {form.formState.isSubmitting ? 'Submitting' : `${type} produsul`}
+            {form.formState.isSubmitting ? '...' : `${type} produsul`}
           </Button>
         </div>
       </form>

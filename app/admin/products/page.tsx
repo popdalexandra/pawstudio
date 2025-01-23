@@ -42,19 +42,20 @@ const AdminProductsPage = async (props: {
   return (
     <div className='space-y-2'>
       <div className='flex-between'>
-        <div className='flex items-center gap-3'>
-          <h1 className='h2-bold'>Produse</h1>
+      <div className="flex items-center gap-8">
+          <h1 className="h2-bold">Produse</h1>
           {searchText && (
-            <div>
-             Filtrează după <i>&quot;{searchText}&quot;</i>{' '}
-              <Link href='/admin/products'>
-                <Button variant='outline' size='sm'>
+            <div className="flex items-center gap-3">
+              Filtrat după <i>&quot;{searchText}&quot;</i>{' '}
+              <Link href="/admin/products">
+                <Button variant="outline" size="sm">
                   Șterge filtrul
                 </Button>
               </Link>
             </div>
           )}
         </div>
+
         <Button asChild variant='default' className=" hover:bg-pink-700">
           <Link href='/admin/products/create'>Adaugă produs</Link>
         </Button>

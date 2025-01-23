@@ -34,19 +34,19 @@ const AdminOrdersPage = async (props: {
   
     const orders = await getAllOrders({
       page: Number(page),
-      
+      query: searchText
     });
   
     return (
       <div className='space-y-2'>
-        <div className='flex items-center gap-3'>
-          <h1 className='h2-bold'>Comenzi</h1>
+        <div className="flex items-center gap-8">
+          <h1 className="h2-bold">Comenzi</h1>
           {searchText && (
-            <div>
+            <div className="flex items-center gap-3">
               Filtrat după <i>&quot;{searchText}&quot;</i>{' '}
-              <Link href='/admin/orders'>
-                <Button variant='outline' size='sm'>
-                  Șterge filtru
+              <Link href="/admin/orders">
+                <Button variant="outline" size="sm">
+                  Șterge filtrul
                 </Button>
               </Link>
             </div>

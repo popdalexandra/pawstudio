@@ -3,7 +3,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Menu from '@/components/shared/header/menu';
 import MainNav from './main-nav';
-import { Input } from '@/components/ui/input';
+import AdminSearch from '@/components/admin/admin-search';
+
 
 export default function AdminLayout({
   children,
@@ -15,19 +16,20 @@ export default function AdminLayout({
       <div className='flex flex-col'>
         <div className='border-b container mx-auto'>
           <div className='flex items-center h-16 px-4'>
-            <Link href='/' className='w-22'>
+          <Link href="/" className="w-22 hidden md:block">
               <Image
-                src='/images/logo_nou.png'
+                src="/images/logo_nou.png"
                 height={48}
                 width={48}
                 alt={APP_NAME}
               />
             </Link>
+
              <MainNav className='mx-6' />
             <div className='ml-auto items-center flex space-x-4'>
-              <div>
-                <Input type='search' placeholder='Caută...' className='md:w-[100px] lg:w-[300px]' />
-              </div>
+              
+                <AdminSearch/>
+              
               <Menu />
             </div>
           </div>
