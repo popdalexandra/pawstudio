@@ -97,11 +97,11 @@ export async function getAllProducts({
         ...ratingFilter,
       },
       orderBy:
-        sort === 'lowest'
+        sort === 'preț crescător'
           ? { price: 'asc' }
-          : sort === 'highest'
+          : sort === 'preț descrescător'
           ? { price: 'desc' }
-          : sort === 'rating'
+          : sort === 'recenzii'
           ? { rating: 'desc' }
           : { createdAt: 'desc' },
       skip: (page - 1) * limit,
@@ -180,3 +180,24 @@ export async function createProduct(data: z.infer<typeof insertProductsSchema>) 
       return { success: false, message: formatError(error) };
     }
   }
+
+  // Get all categories
+export async function getAllCategories() {
+  const data = await prisma.product.groupBy({
+    by: ['category'],
+    _count: true,
+  });
+
+  return data;
+}
+
+// Get featured products
+export async function getFeaturedProducts() {
+  const data = await prisma.product.findMany({
+    where: { isFeatured: true },
+    orderBy: { createdAt: 'desc' },
+    take: 4,
+  });
+
+  return convertToPlainObject(data);
+}
