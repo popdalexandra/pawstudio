@@ -129,3 +129,16 @@ export const updateUserSchema = updateProfileSchema.extend({
   id: z.string().min(1, 'ID este necesar'),
   role: z.string().min(1, 'Rolul este necesar'),
 });
+
+// Schema to insert reviews
+export const insertReviewSchema = z.object({
+  title: z.string().min(3, 'Titlul trebuie sa fie de cel puțin 3 caractere'),
+  description: z.string().min(3, 'Descrierea trebuie sa fie de cel puțin 3 caractere'),
+  productId: z.string().min(1, 'Produsul este necesar'),
+  userId: z.string().min(1, 'Utilizatorul este necesar'),
+  rating: z.coerce
+    .number()
+    .int()
+    .min(1, 'Evaluarea trebuie sa fie cel putin 1')
+    .max(5, 'Evaluarea trebuie sa fie cel mult 5'),
+});

@@ -6,6 +6,8 @@ import ProductPrice from '@/components/shared/product/product-price';
 import ProductImages from "@/components/shared/product/product-images";
 import AddToCarrt from "@/components/shared/product/add-to-cart";
 import { getMyCart } from "@/lib/actions/cart.actions";
+import ReviewList from "./review-list";
+import { auth } from "@/auth";
 
 const ProductDetailsPage = async (props: {
     params: Promise<{slug:string}>
@@ -15,6 +17,9 @@ const ProductDetailsPage = async (props: {
     const{slug} = await props.params;
     const product = await getProductBySlug(slug);
     if(!product) notFound();
+
+    const session = await auth();
+    const userId = session?.user?.id;
 
     const cart = await getMyCart();
 
@@ -34,9 +39,11 @@ const ProductDetailsPage = async (props: {
                     </p>
                     <h1 className="h3-bold">{product.name}</h1>
                     <p>{product.rating} of { product.numReviews} reviews</p>
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-                        <div className="w-27 rounded-full bg-pink-200 text-pink-800 px-2 py-2"> <ProductPrice value={Number(product.price)} />
-                        </div>                      
+                    <div className="flex items-center gap-1">
+                    <div className="bg-pink-200 text-pink-800 px-2 py-1 rounded-full flex items-center">
+                        <ProductPrice value={Number(product.price)} />
+                        <span className="ml-1">RON</span>
+                    </div>
                     </div>
                 </div>
                 <div className="mt-10">
@@ -80,6 +87,16 @@ const ProductDetailsPage = async (props: {
             </div>
         </div>
     </section>
+
+    <section className='mt-10'>
+        <h2 className='h2-bold mb-5'>Recenzii</h2>
+        <ReviewList
+          userId={userId || ''}
+          productId={product.id}
+          productSlug={product.slug}
+        />
+      </section>
+
     </>
 }
  
