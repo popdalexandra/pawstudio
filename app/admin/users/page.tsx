@@ -63,7 +63,7 @@ const AdminUserPage = async (props: {
                   <TableCell>{user.name}</TableCell>
                   <TableCell>{user.email}</TableCell>
                   <TableCell>
-                    {user.role === 'utilizator' ? (
+                    {user.role === 'user' ? (
                       <Badge variant='secondary'>Utilizator</Badge>
                     ) : (
                       <Badge className="bg-pink-200 text-black hover:bg-pink-200">Admin</Badge>

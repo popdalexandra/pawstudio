@@ -33,7 +33,7 @@ const SignUpForm = () => {
         <input type="hidden" name="callbackUrl" value={callbackUrl} />
         <div className="space-y-6">
         <div>
-                <Label htmlFor='name'>Email</Label>
+                <Label htmlFor='name'>Nume</Label>
                 <Input 
                         id = 'name'
                         name = 'name'

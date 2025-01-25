@@ -77,7 +77,7 @@ const ReviewList = ({
                 <Rating value={review.rating} />
                 <div className='flex items-center'>
                   <User className='mr-1 h-3 w-3' />
-                  {review.user ? review.user.name : 'utilizator'}
+                  {review.user ? review.user.name : 'user'}
                 </div>
                 <div className='flex items-center'>
                   <Calendar className='mr-1 h-3 w-3' />
