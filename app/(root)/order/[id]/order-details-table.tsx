@@ -27,9 +27,10 @@ import {
   updateOrderToPaidCOD,
   deliverOrder
 } from '@/lib/actions/order.actions';
+import StripePayment from './stripe-payment';
 
 
-const OrderDetailsTable = ({order, paypalClientId, isAdmin}: {order: Order, paypalClientId: string, isAdmin:boolean}) => {
+const OrderDetailsTable = ({order, paypalClientId, isAdmin, stripeClientSecret,}: {order: Order, paypalClientId: string, isAdmin:boolean, stripeClientSecret: string | null;}) => {
 
     const {
         id,
@@ -242,6 +243,15 @@ const OrderDetailsTable = ({order, paypalClientId, isAdmin}: {order: Order, payp
                   <p className="text-xs text-gray-500"> Prețul afișat include taxe.<br/>Toate plățile efectuate prin PayPal vor fi procesate în EUR(€). <br/>Conversia din RON în EUR se realizează folosind un curs valutar fix de 1 RON = 0.207 USD.
               <br/>Vă rugăm să verificați suma finală afișată în PayPal înainte de confirmarea plății.</p>
                 </div>
+              )}
+
+                {/* Stripe Payment */}
+                {!isPaid && paymentMethod === 'Card de credit' && stripeClientSecret && (
+                <StripePayment
+                  priceInCents={Number(order.totalPrice) * 100}
+                  orderId={order.id}
+                  clientSecret={stripeClientSecret}
+                />
               )}
 
               {/*Cash On Delivery */}
