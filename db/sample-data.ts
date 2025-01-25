@@ -1,17 +1,17 @@
-import { hash } from "@/lib/encrypt";
+// import { hash } from "@/lib/encrypt";
 
 const sampleData = {
   users:[
     {
     name: 'Denisa',
     email: 'admin@example.com',
-    password: hash('123456'),
+    password: '123456',
     role: 'admin'
     },
     {
       name: 'Mihnea',
       email: 'user@example.com',
-      password: hash('123456'),
+      password: '123456',
       role: 'user'
       }
   ],
