@@ -7,7 +7,7 @@ import { convertToPlainObject, formatError } from '../utils';
 import { insertOrderSchema } from '../validators';
 import { prisma } from '@/db/prisma';
 import { isRedirectError } from 'next/dist/client/components/redirect-error';
-import { CartItem, paymentResult } from '@/types';
+import { CartItem, PaymentResult } from '@/types';
 import { paypal } from '../paypal';
 import { revalidatePath } from 'next/cache';
 import { PAGE_SIZE } from '../constants';
@@ -180,7 +180,7 @@ export async function approvePayPalOrder(
 
     if (
       !captureData ||
-      captureData.id !== (order.paymentResult as paymentResult)?.id ||
+      captureData.id !== (order.paymentResult as PaymentResult)?.id ||
       captureData.status !== 'COMPLETED'
     ) {
       throw new Error('Eroare la plata prin PayPal.');
@@ -215,7 +215,7 @@ export async function updateOrderToPaid({
   paymentResult,
 }: {
   orderId: string;
-  paymentResult?: paymentResult;
+  paymentResult?: PaymentResult;
 }) {
   // Get order from database
   const order = await prisma.order.findFirst({
