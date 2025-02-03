@@ -23,16 +23,16 @@ import {
       id: crypto.randomUUID(),
       userId: '123',
       user: {
-        name: 'John Doe',
+        name: 'Pop Denisa',
         email: 'test@test.com',
       },
       paymentMethod: 'Stripe',
       shippingAddress: {
-          fullName: 'John Doe',
-          streetAddress: '123 Main st',
-          city: 'New York',
-          postalCode: '10001',
-          country: 'US',
+          fullName: 'Pop Denisa',
+          streetAddress: 'Dr. Ioan Muresan 105',
+          city: 'Timisoara',
+          postalCode: '305100',
+          country: 'RO',
           phoneNumber: ''
       },
       createdAt: new Date(),
@@ -71,23 +71,23 @@ import {
   export default function PurchaseReceiptEmail({ order }: OrderInformationProps) {
     return (
       <Html>
-        <Preview>View order receipt</Preview>
+        <Preview>Vezi detaliile comenzii</Preview>
         <Tailwind>
           <Head />
           <Body className='font-sans bg-white'>
             <Container className='max-w-xl'>
-              <Heading>Purchase Receipt</Heading>
+              <Heading>Detalii comandă</Heading>
               <Section>
                 <Row>
                   <Column>
                     <Text className='mb-0 mr-4 text-gray-500 whitespace-nowrap text-nowrap'>
-                      Order ID
+                      ID
                     </Text>
                     <Text className='mt-0 mr-4'>{order.id.toString()}</Text>
                   </Column>
                   <Column>
                     <Text className='mb-0 mr-4 text-gray-500 whitespace-nowrap text-nowrap'>
-                      Purchase Date
+                      DATA
                     </Text>
                     <Text className='mt-0 mr-4'>
                       {dateFormatter.format(order.createdAt)}
@@ -95,7 +95,7 @@ import {
                   </Column>
                   <Column>
                     <Text className='mb-0 mr-4 text-gray-500 whitespace-nowrap text-nowrap'>
-                      Price Paid
+                      PREȚ
                     </Text>
                     <Text className='mt-0 mr-4'>
                       {formatCurrency(order.totalPrice)}
@@ -127,9 +127,9 @@ import {
                   </Row>
                 ))}
                 {[
-                  { name: 'Items', price: order.itemsPrice },
-                  { name: 'Tax', price: order.taxPrice },
-                  { name: 'Shipping', price: order.shippingPrice },
+                  { name: 'Produse', price: order.itemsPrice },
+                  { name: 'Taxă de împachetare', price: order.taxPrice },
+                  { name: 'Transport', price: order.shippingPrice },
                   { name: 'Total', price: order.totalPrice },
                 ].map(({ name, price }) => (
                   <Row key={name} className='py-1'>

@@ -13,7 +13,7 @@ export const sendPurchaseReceipt = async ({ order }: { order: Order }) => {
   await resend.emails.send({
     from: `${APP_NAME} <${SENDER_EMAIL}>`,
     to: order.user.email,
-    subject: `Order Confirmation ${order.id}`,
+    subject: `Comada ${order.id} a fost plasată cu succes.`,
     react: <PurchaseReceiptEmail order={order} />,
   });
 };
